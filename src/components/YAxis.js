@@ -1,28 +1,57 @@
-/**
- *  Copyright (c) 2015-present, The Regents of the University of California,
- *  through Lawrence Berkeley National Laboratory (subject to receipt
- *  of any required approvals from the U.S. Dept. of Energy).
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree.
- */
+"use strict";
 
-import "d3-transition";
-import merge from "merge";
-import React from "react";
-import ReactDOM from "react-dom"; // eslint-disable-line
-import PropTypes from "prop-types";
-import { axisLeft, axisRight } from "d3-axis";
-import { easeSinOut } from "d3-ease";
-import { format } from "d3-format";
-import { select } from "d3-selection";
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-import { scaleAsString } from "../js/util";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-const MARGIN = 0;
+require("d3-transition");
 
-const defaultStyle = {
+var _merge = require("merge");
+
+var _merge2 = _interopRequireDefault(_merge);
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require("react-dom");
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _d3Axis = require("d3-axis");
+
+var _d3Ease = require("d3-ease");
+
+var _d3Format = require("d3-format");
+
+var _d3Selection = require("d3-selection");
+
+var _util = require("../js/util");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  Copyright (c) 2015-present, The Regents of the University of California,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  through Lawrence Berkeley National Laboratory (subject to receipt
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  of any required approvals from the U.S. Dept. of Energy).
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  All rights reserved.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  This source code is licensed under the BSD-style license found in the
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                *  LICENSE file in the root directory of this source tree.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+// eslint-disable-line
+
+
+var MARGIN = 0;
+
+var defaultStyle = {
   labels: {
     labelColor: "#8B7E7E", // Default label color
     labelWeight: 100,
@@ -32,6 +61,19 @@ const defaultStyle = {
     axisColor: "#C0C0C0"
   }
 };
+
+var cLabeles = [
+    {
+      sLen: 0,
+      sWidth: 3.14,
+      name: "none",
+    },
+    {
+      sLen: 1,
+      sWidth: 1.74,
+      name: "none",
+    },
+];
 
 /**
  * The YAxis widget displays a vertical axis to the left or right
@@ -80,193 +122,161 @@ const defaultStyle = {
  *  Each of the line charts uses its `axis` prop to identify the axis ("aud" or "euro")
  *  it will use for its vertical scale.
  */
-export default class YAxis extends React.Component {
-  componentDidMount() {
-    this.renderAxis(
-      this.props.align,
-      this.props.scale,
-      +this.props.width,
-      this.props.absolute,
-      this.props.format
-    );
+
+var YAxis = function (_React$Component) {
+  _inherits(YAxis, _React$Component);
+
+  function YAxis() {
+    _classCallCheck(this, YAxis);
+
+    return _possibleConstructorReturn(this, (YAxis.__proto__ || Object.getPrototypeOf(YAxis)).apply(this, arguments));
   }
 
-  componentWillReceiveProps(nextProps) {
-    const scale = nextProps.scale;
-    const align = nextProps.align;
-    const width = nextProps.width;
-    const absolute = nextProps.absolute;
-    const fmt = nextProps.format;
-    const type = nextProps.type;
-
-    if (
-      scaleAsString(this.props.scale) !== scaleAsString(scale) ||
-        this.props.type !== nextProps.type
-    ) {
-      this.updateAxis(align, scale, width, absolute, type, fmt);
+  _createClass(YAxis, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.renderAxis(this.props.align, this.props.scale, +this.props.width, this.props.absolute, this.props.format, this.props.customLabels);
     }
-  }
+  }, {
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      var scale = nextProps.scale;
+      var align = nextProps.align;
+      var width = nextProps.width;
+      var absolute = nextProps.absolute;
+      var fmt = nextProps.format;
+      var type = nextProps.type;
+      var customLabels = nextProps.customLabels;
 
-  shouldComponentUpdate() { // eslint-disable-line
-    return false;
-  }
-
-  updateAxis(align, scale, width, absolute, type, fmt) {
-    const yformat = format(fmt);
-    const axis = align === "left" ? axisLeft : axisRight;
-
-    const axisStyle = merge(
-      true,
-      defaultStyle.axis,
-      this.props.style.axis ? this.props.style.axis : {}
-    );
-    const { axisColor } = axisStyle;
-
-    //
-    // Make an axis generator
-    //
-
-    let axisGenerator;
-    if (type === "linear" || type === "power") {
-      if (this.props.height <= 200) {
-        axisGenerator = axis(scale).ticks(5).tickFormat(d => {
-          if (absolute) {
-            return yformat(Math.abs(d));
-          }
-          return yformat(d);
-        });
-      } else {
-        axisGenerator = axis(scale).tickFormat(d => {
-          if (absolute) {
-            return yformat(Math.abs(d));
-          }
-          return yformat(d);
-        });
+      if ((0, _util.scaleAsString)(this.props.scale) !== (0, _util.scaleAsString)(scale) || this.props.type !== nextProps.type) {
+        this.updateAxis(align, scale, width, absolute, type, fmt, customLabels);
       }
-    } else if (type === "log") {
-      axisGenerator = axis(scale).ticks(10, ".2s");
     }
+  }, {
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate() {
+      // eslint-disable-line
+      return false;
+    }
+  }, {
+    key: "updateAxis",
+    value: function updateAxis(align, scale, width, absolute, type, fmt, customLabels) {
+      var yformat = (0, _d3Format.format)(fmt);
+      var axis = align === "left" ? _d3Axis.axisLeft : _d3Axis.axisRight;
 
-    select(ReactDOM.findDOMNode(this))
-      .select(".yaxis")
-      .transition()
-      .duration(this.props.transition)
-      .ease(easeSinOut)
-      .call(axisGenerator);
+      var axisStyle = (0, _merge2.default)(true, defaultStyle.axis, this.props.style.axis ? this.props.style.axis : {});
+      var axisColor = axisStyle.axisColor;
 
-    select(ReactDOM.findDOMNode(this)) // eslint-disable-line
-      .select("g")
-      .selectAll(".tick")
-      .select("text")
-      .style("fill", axisColor)
-      .style("stroke", "none");
+      //
+      // Make an axis generator
+      //
 
-    select(ReactDOM.findDOMNode(this)) // eslint-disable-line
-      .select("g")
-      .selectAll(".tick")
-      .select("line")
-      .style("stroke", axisColor);
-  }
-
-  renderAxis(align, scale, width, absolute, fmt) {
-    const yformat = format(fmt);
-    let axisGenerator;
-    const axis = align === "left" ? axisLeft : axisRight;
-    if (this.props.type === "linear" || this.props.type === "power") {
-      if (this.props.height <= 200) {
-        axisGenerator = axis(scale).ticks(5).tickFormat(d => {
-          if (absolute) {
-            return yformat(Math.abs(d));
-          }
-          return yformat(d);
-        }).tickSizeOuter(0);
-      } else {
-        axisGenerator = axis(scale).tickFormat(d => {
-          if (absolute) {
-            return yformat(Math.abs(d));
-          }
-          return yformat(d);
-        }).tickSizeOuter(0);
+      var axisGenerator = void 0;
+      if (type === "linear" || type === "power") {
+        if (this.props.height <= 200) {
+          axisGenerator = axis(scale).ticks(5).tickFormat(function (d) {
+            if (absolute) {
+              var inData = customLabels.filter(function (v) {return v.sWidth === d});
+              return inData.length ? inData[0].name : yformat(Math.abs(d));
+            }
+            var inData = customLabels.filter(function (v) {return v.sWidth === d});
+            return inData.length ? inData[0].name : yformat(d);
+            //return yformat(d);
+          });
+        } else {
+          axisGenerator = axis(scale).tickFormat(function (d) {
+            if (absolute) {
+              var inData = customLabels.filter(function (v) {return v.sWidth === d});
+              return inData.length ? inData[0].name : yformat(Math.abs(d));
+            }
+            var inData = customLabels.filter(function (v) {return v.sWidth === d});
+            return inData.length ? inData[0].name : yformat(d);
+          });
+        }
+      } else if (type === "log") {
+        axisGenerator = axis(scale).ticks(10, ".2s");
       }
-    } else if (this.props.type === "log") {
-      axisGenerator = axis().scale(scale).ticks(10, ".2s").tickSizeOuter(0);
+
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)).select(".yaxis").transition().duration(this.props.transition).ease(_d3Ease.easeSinOut).call(axisGenerator);
+
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)) // eslint-disable-line
+      .select("g").selectAll(".tick").select("text").style("fill", axisColor).style("stroke", "none");
+
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)) // eslint-disable-line
+      .select("g").selectAll(".tick").select("line").style("stroke", axisColor);
     }
+  }, {
+    key: "renderAxis",
+    value: function renderAxis(align, scale, width, absolute, fmt, customLabels) {
+      var yformat = (0, _d3Format.format)(fmt);
+      var axisGenerator = void 0;
+      var axis = align === "left" ? _d3Axis.axisLeft : _d3Axis.axisRight;
+      if (this.props.type === "linear" || this.props.type === "power") {
+        if (this.props.height <= 200) {
+          axisGenerator = axis(scale).ticks(5).tickFormat(function (d) {
+            if (absolute) {
+              var inData = customLabels.filter(function (v) {return v.sWidth === d});
+              return inData.length ? inData[0].name : yformat(Math.abs(d));
+            }
+            return yformat(d);
+          }).tickSizeOuter(0);
+        } else {
+          axisGenerator = axis(scale).tickFormat(function (d) {
+            if (absolute) {
+              var inData = customLabels.filter(function (v) {return v.sWidth === d});
+              return inData.length ? inData[0].name : yformat(Math.abs(d));
+            }
+            var inData = customLabels.filter(function (v) {return v.sWidth === d});
+            return inData.length ? inData[0].name : yformat(d);
+          }).tickSizeOuter(0);
+        }
+      } else if (this.props.type === "log") {
+        axisGenerator = axis().scale(scale).ticks(10, ".2s").tickSizeOuter(0);
+      }
 
-    // Remove the old axis from under this DOM node
-    select(ReactDOM.findDOMNode(this)).selectAll("*").remove(); // eslint-disable-line
-    // Add the new axis
-    const x = align === "left" ? width - MARGIN : 0;
-    const labelOffset = align === "left"
-      ? this.props.labelOffset - 50
-      : 40 + this.props.labelOffset;
+      // Remove the old axis from under this DOM node
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)).selectAll("*").remove(); // eslint-disable-line
+      // Add the new axis
+      var x = align === "left" ? width - MARGIN : 0;
+      var labelOffset = align === "left" ? this.props.labelOffset - 50 : 40 + this.props.labelOffset;
 
-    //
-    // Style
-    //
+      //
+      // Style
+      //
 
-    const labelStyle = merge(
-      true,
-      defaultStyle.labels,
-      this.props.style.labels ? this.props.style.labels : {}
-    );
-    const axisStyle = merge(
-      true,
-      defaultStyle.axis,
-      this.props.style.axis ? this.props.style.axis : {}
-    );
-    const { axisColor } = axisStyle;
-    const { labelColor, labelWeight, labelSize } = labelStyle;
+      var labelStyle = (0, _merge2.default)(true, defaultStyle.labels, this.props.style.labels ? this.props.style.labels : {});
+      var axisStyle = (0, _merge2.default)(true, defaultStyle.axis, this.props.style.axis ? this.props.style.axis : {});
+      var axisColor = axisStyle.axisColor;
+      var labelColor = labelStyle.labelColor,
+          labelWeight = labelStyle.labelWeight,
+          labelSize = labelStyle.labelSize;
 
-    this.axis = select(ReactDOM.findDOMNode(this)) // eslint-disable-line
-      .append("g")
-      .attr("transform", `translate(${x},0)`)
-      .style("stroke", "none")
-      .attr("class", "yaxis")
-      .style("fill", labelColor)
-      .style("font-weight", labelWeight)
-      .style("font-size", labelSize)
-      .call(axisGenerator)
-      .append("text")
-      .text(this.props.label)
-      .attr("transform", "rotate(-90)")
-      .attr("y", labelOffset)
-      .attr("dy", ".71em")
-      .attr("text-anchor", "end")
-      .style("fill", this.props.style.labelColor)
-      .style(
-        "font-family",
-        this.props.style.labelFont || '"Goudy Bookletter 1911", sans-serif"'
-      )
-      .style("font-weight", this.props.style.labelWeight || 100)
-      .style(
-        "font-size",
-        this.props.style.labelSize ? `${this.props.style.width}px` : "12px"
-      );
 
-    select(ReactDOM.findDOMNode(this)) // eslint-disable-line
-      .select("g")
-      .selectAll(".tick")
-      .select("text")
-      .style("fill", axisColor)
-      .style("stroke", "none");
+      this.axis = (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)) // eslint-disable-line
+      .append("g").attr("transform", "translate(" + x + ",0)").style("stroke", "none").attr("class", "yaxis").style("fill", labelColor).style("font-weight", labelWeight).style("font-size", labelSize).call(axisGenerator).append("text").text(this.props.label).attr("transform", "rotate(-90)").attr("y", labelOffset).attr("dy", ".71em").attr("text-anchor", "end").style("fill", this.props.style.labelColor).style("font-family", this.props.style.labelFont || '"Goudy Bookletter 1911", sans-serif"').style("font-weight", this.props.style.labelWeight || 100).style("font-size", this.props.style.labelSize ? this.props.style.width + "px" : "12px");
 
-    select(ReactDOM.findDOMNode(this)) // eslint-disable-line
-      .select("g")
-      .selectAll(".tick")
-      .select("line")
-      .style("stroke", axisColor);
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)) // eslint-disable-line
+      .select("g").selectAll(".tick").select("text").style("fill", axisColor).style("stroke", "none");
 
-    select(ReactDOM.findDOMNode(this)) // eslint-disable-line
-      .select("g")
-      .select("path")
-      .style("fill", "none")
-      .style("stroke", axisColor);
-  }
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)) // eslint-disable-line
+      .select("g").selectAll(".tick").select("line").style("stroke", axisColor);
 
-  render() { // eslint-disable-line
-    return <g />;
-  }
-}
+      (0, _d3Selection.select)(_reactDom2.default.findDOMNode(this)) // eslint-disable-line
+      .select("g").select("path").style("fill", "none").style("stroke", axisColor);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      // eslint-disable-line
+      return _react2.default.createElement("g", null);
+    }
+  }]);
+
+  return YAxis;
+}(_react2.default.Component);
+
+exports.default = YAxis;
+
 
 YAxis.defaultProps = {
   id: "yaxis", // id referred to by the chart
@@ -279,7 +289,8 @@ YAxis.defaultProps = {
   labelOffset: 0, // Offset the label position
   transition: 100, // Axis transition time
   width: 80,
-  style: defaultStyle
+  style: defaultStyle,
+  customLabels: cLabeles
 };
 
 YAxis.propTypes = {
@@ -287,27 +298,27 @@ YAxis.propTypes = {
    * A name for the axis which can be used by a chart to reference the axis.
    * This is used by the ChartRow to match charts to this axis.
    */
-  id: PropTypes.string.isRequired, // eslint-disable-line
+  id: _react2.default.PropTypes.string.isRequired, // eslint-disable-line
   /**
    * The label to be displayed alongside the axis.
    */
-  label: PropTypes.string,
+  label: _react2.default.PropTypes.string,
   /**
    * The scale type: linear, power, or log.
    */
-  type: PropTypes.oneOf(["linear", "power", "log"]),
+  type: _react2.default.PropTypes.oneOf(["linear", "power", "log"]),
   /**
    * Minium value, which combined with "max", define the scale of the axis.
    */
-  min: PropTypes.number.isRequired, // eslint-disable-line
+  min: _react2.default.PropTypes.number.isRequired, // eslint-disable-line
   /**
    * Maxium value, which combined with "min,"" define the scale of the axis.
    */
-  max: PropTypes.number.isRequired, // eslint-disable-line
+  max: _react2.default.PropTypes.number.isRequired, // eslint-disable-line
   /**
    * Render all ticks on the axis as positive values.
    */
-  absolute: PropTypes.bool, // eslint-disable-line
+  absolute: _react2.default.PropTypes.bool, // eslint-disable-line
   /**
    * Object specifying the available parameters by which the axis can be
    * styled. The object can contain: "labels" and "axis". Each of these
@@ -317,48 +328,49 @@ YAxis.propTypes = {
    * In addition the axis label itself can be styled with: "labelColor",
    * "labelFont", "labelWidth" and "labelSize".
    */
-  style: PropTypes.shape({
-    labels: PropTypes.object, // eslint-disable-line
-    axis: PropTypes.object, // eslint-disable-line
-    labelColor: PropTypes.string,
-    labelFont: PropTypes.string,
-    labelWeight: PropTypes.string,
-    labelSize: PropTypes.string,
-    width: PropTypes.number
+  style: _react2.default.PropTypes.shape({
+    labels: _react2.default.PropTypes.object, // eslint-disable-line
+    axis: _react2.default.PropTypes.object, // eslint-disable-line
+    labelColor: _react2.default.PropTypes.string,
+    labelFont: _react2.default.PropTypes.string,
+    labelWeight: _react2.default.PropTypes.string,
+    labelSize: _react2.default.PropTypes.string,
+    width: _react2.default.PropTypes.number
   }),
   /**
    * The transition time for moving from one scale to another
    */
-  transition: PropTypes.number,
+  transition: _react2.default.PropTypes.number,
   /**
    * The width of the axis
    */
-  width: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.number]),
   /**
    * Offset the axis label from its default position. This allows you to
    * fine tune the label location, which may be necessary depending on the
    * scale and how much room the tick labels take up. Maybe positive or
    * negative.
    */
-  labelOffset: PropTypes.number,
+  labelOffset: _react2.default.PropTypes.number,
   /**
    * d3.format for the axis labels. e.g. `format="$,.2f"`
    */
-  format: PropTypes.string,
+  format: _react2.default.PropTypes.string,
   /**
    * If the chart should be rendered to with the axis on the left or right.
    * If you are using the axis in a ChartRow, you do not need to provide this.
    */
-  align: PropTypes.string,
+  align: _react2.default.PropTypes.string,
   /**
    * [Internal] The scale supplied by the ChartRow
    */
-  scale: PropTypes.func,
+  scale: _react2.default.PropTypes.func,
   /**
    * [Internal] The height supplied by the surrounding ChartContainer
    */
-  height: PropTypes.number
+  height: _react2.default.PropTypes.number,
+  /**
+   *  for making customLabels
+   */
+   customLabels: _react2.default.PropTypes.array
 };
